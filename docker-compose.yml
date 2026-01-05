@@ -26,6 +26,8 @@ services:
       POSTGRES_HOST: db
       RAILS_ENV: development
       SECRET_KEY_BASE: development_secret_dummy_key
+      BUNDLE_DEPLOYMENT: "0"
+      BUNDLE_FROZEN: "0"
 
 volumes:
   postgres_data:
