@@ -1,0 +1,31 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:14
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+    ports:
+      - "5432:5432"
+
+  api:
+    build: .
+    user: root
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -b '0.0.0.0'"
+    volumes:
+      - .:/rails
+    ports:
+      - "3001:3000"
+    depends_on:
+      - db
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+      POSTGRES_HOST: db
+      RAILS_ENV: development
+      SECRET_KEY_BASE: development_secret_dummy_key
+
+volumes:
+  postgres_data:
