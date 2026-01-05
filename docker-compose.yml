@@ -11,11 +11,16 @@ services:
       - "5432:5432"
 
   api:
-    build: .
+    build:
+      context: .
+      args:
+        BUNDLE_DEPLOYMENT: "0"
+        RAILS_ENV_ARG: "development"
     user: root
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -b '0.0.0.0'"
+    command: bash -c "cd /rails && bundle check || bundle install && rm -f tmp/pids/server.pid && bundle exec rails s -b '0.0.0.0'"
     volumes:
       - .:/rails
+      - bundle_cache:/usr/local/bundle
     ports:
       - "3001:3000"
     depends_on:
@@ -31,3 +36,4 @@ services:
 
 volumes:
   postgres_data:
+  bundle_cache:

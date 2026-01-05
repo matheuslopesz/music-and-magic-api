@@ -16,14 +16,22 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y curl libjemalloc2 libvips postgresql-client && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
-# Set production environment
-ENV RAILS_ENV="production" \
-    BUNDLE_DEPLOYMENT="1" \
+# Build argument to control bundle deployment mode
+ARG BUNDLE_DEPLOYMENT=1
+ARG RAILS_ENV_ARG=production
+
+# Set environment based on build args
+ENV RAILS_ENV="${RAILS_ENV_ARG}" \
+    BUNDLE_DEPLOYMENT="${BUNDLE_DEPLOYMENT}" \
     BUNDLE_PATH="/usr/local/bundle" \
     BUNDLE_WITHOUT="development"
 
 # Throw-away build stage to reduce size of final image
 FROM base AS build
+
+# Re-declare build args for this stage
+ARG BUNDLE_DEPLOYMENT=1
+ARG RAILS_ENV_ARG=production
 
 # Install packages needed to build gems
 RUN apt-get update -qq && \
@@ -32,15 +40,20 @@ RUN apt-get update -qq && \
 
 # Install application gems
 COPY Gemfile Gemfile.lock ./
-RUN bundle install && \
-    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
-    bundle exec bootsnap precompile --gemfile
+RUN if [ "$BUNDLE_DEPLOYMENT" = "1" ]; then \
+      bundle install && \
+      rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
+      bundle exec bootsnap precompile --gemfile; \
+    else \
+      bundle install && \
+      rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git; \
+    fi
 
 # Copy application code
 COPY . .
 
-# Precompile bootsnap code for faster boot times
-RUN bundle exec bootsnap precompile app/ lib/
+# Precompile bootsnap code for faster boot times (only in production)
+RUN if [ "$BUNDLE_DEPLOYMENT" = "1" ]; then bundle exec bootsnap precompile app/ lib/; fi
 
 
 

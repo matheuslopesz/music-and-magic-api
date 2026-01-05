@@ -1,15 +1,15 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  title: MyString
-  summary: MyString
-  content: MyText
-  published_at: 2026-01-05 22:37:26
-  slug: MyString
+  title: "Primeiro Post de Teste"
+  summary: "Este é um resumo do primeiro post"
+  content: "Este é o conteúdo completo do primeiro post de teste."
+  published_at: <%= 1.day.ago %>
+  slug: "primeiro-post-de-teste"
 
 two:
-  title: MyString
-  summary: MyString
-  content: MyText
-  published_at: 2026-01-05 22:37:26
-  slug: MyString
+  title: "Segundo Post de Teste"
+  summary: "Este é um resumo do segundo post"
+  content: "Este é o conteúdo completo do segundo post de teste."
+  published_at: <%= 2.days.ago %>
+  slug: "segundo-post-de-teste"
