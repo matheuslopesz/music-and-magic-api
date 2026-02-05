@@ -94,7 +94,7 @@ GEM
     drb (2.2.3)
     erb (6.0.1)
     erubi (1.13.1)
-    friendly_id (5.5.1)
+    friendly_id (5.6.0)
       activerecord (>= 4.0.0)
     globalid (1.3.0)
       activesupport (>= 6.1)
@@ -253,7 +253,7 @@ DEPENDENCIES
   bootsnap
   brakeman
   debug
-  friendly_id (~> 5.5.0)
+  friendly_id (~> 5.6.0)
   minitest (~> 5.10, != 5.10.2)
   pg (~> 1.1)
   puma (>= 5.0)

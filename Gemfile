@@ -37,7 +37,7 @@ group :development, :test do
   gem "brakeman", require: false
 
   # Creates friendly urls
-  gem "friendly_id", "~> 5.5.0"
+  gem "friendly_id", "~> 5.6.0"
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
